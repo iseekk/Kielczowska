@@ -1,0 +1,22 @@
+<a class="btn btn-primary" href="{% url 'add_comment_to_post' pk=post.pk %}">Add comment</a>
+
+
+<div class="container">
+  {% for comment in post.comments.all %}
+    <br>
+    {% if user.is_authenticated or comment.approved_comment %}
+      <p>{{comment.author}} | {{comment.create_date}}</p>
+      {% if not comment.approved_comment %}
+        <a class="btn btn-success" href="{% url 'comment_approve' pk=comment.pk %}">Approve</a>
+        <a class="btn btn-danger" href="{% url 'comment_remove' pk=comment.pk %}">Delete</a>
+      {% endif %}
+      <div class="card">
+        <div class="container">
+          <p class="mt-2">{{comment.text|safe|linebreaksbr}}</p>
+        </div>
+      </div>
+    {% endif %}
+    {% empty %}
+    <p>No comments</p>
+  {% endfor %}
+</div>
